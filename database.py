@@ -13,7 +13,7 @@ class Transfer:
     number = 0
     order_id = '123'
 
-    def check_student(self,level, idd):
+    def check_student(self, level, idd):
         if True:
             import firebase_admin
             firebase_admin._apps.clear()
@@ -21,14 +21,61 @@ class Transfer:
             if not firebase_admin._apps:
                 cred = credentials.Certificate("school-diary-f3a73-firebase-adminsdk-xvqli-73aadbafa6.json")
                 initialize_app(cred, {'databaseURL': 'https://school-diary-f3a73-default-rtdb.firebaseio.com/'})
-                ref = db.reference('Diary').child("classes").child(level).child("students").child(idd)
+                ref = db.reference('Diary').child("classes")
                 data = ref.get()
-                if idd in data:
-                    return data
 
-                elif level not in data:
+                if level in data:
+                    if idd in data[level]["students"]:
+                        info = data[level]["students"][idd]
+                        return info
+                    else:
+                        return "No"
+                else:
                     return "Noclass"
 
-                else:
-                    return "NO"
+    def fetch_homework(self, level):
+        if True:
+            import firebase_admin
+            firebase_admin._apps.clear()
+            from firebase_admin import credentials, initialize_app, db
+            if not firebase_admin._apps:
+                cred = credentials.Certificate("school-diary-f3a73-firebase-adminsdk-xvqli-73aadbafa6.json")
+                initialize_app(cred, {'databaseURL': 'https://school-diary-f3a73-default-rtdb.firebaseio.com/'})
+                ref = db.reference('Diary').child("classes").child(level).child("homework")
+                data = ref.get()
 
+                return data["Homework"]
+
+    def get_attendance(self, level, i):
+        if True:
+            import firebase_admin
+            firebase_admin._apps.clear()
+            from firebase_admin import credentials, initialize_app, db
+            if not firebase_admin._apps:
+                cred = credentials.Certificate("school-diary-f3a73-firebase-adminsdk-xvqli-73aadbafa6.json")
+                initialize_app(cred, {'databaseURL': 'https://school-diary-f3a73-default-rtdb.firebaseio.com/'})
+                ref = db.reference('Diary').child("classes").child(level).child("Attendance").child(self.year()).child(
+                    self.month_date()).child(i)
+                data = ref.get()
+                new = data["student_id"]
+
+                if i in new:
+                    return "present"
+
+
+    def year(self):
+        current_time = str(datetime.now())
+        date, time = current_time.strip().split()
+        y, m, d = date.strip().split("-")
+
+        return y
+
+    def month_date(self):
+        current_time = str(datetime.now())
+        date, time = current_time.strip().split()
+        y, m, d = date.strip().split("-")
+
+        return f"{m}_{d}"
+
+
+Transfer.get_attendance(Transfer(), "class3", "KVKn2u")

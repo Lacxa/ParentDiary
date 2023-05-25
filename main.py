@@ -1,3 +1,5 @@
+import os
+
 from kivy import utils
 from kivy.properties import NumericProperty, StringProperty
 from kivymd.app import MDApp
@@ -24,6 +26,11 @@ class MainApp(MDApp):
 
     # student
     name = StringProperty("")
+    work = StringProperty("")
+    attend = StringProperty("")
+
+    class_name = StringProperty("")
+    read = StringProperty("")
 
     def build(self):
         pass
@@ -40,15 +47,48 @@ class MainApp(MDApp):
 
     def search_student(self, clas, idd):
         data = TR.check_student(TR(), clas, idd)
-        if data == "No":
-            toast("Invalid id")
-
-        elif data == "Noclass":
+        if data == "Noclass":
             toast("Invalid Class")
+
+        elif data == "No":
+            toast("Invalid id")
 
         else:
             self.name = data["Name"]
             self.screen_capture("info")
+
+    def homework(self, clas):
+        self.work = TR.fetch_homework(TR(), clas)
+
+    def attendance(self):
+        data = TR.get_attendance(TR(), self.class_name, )
+        if data == "present":
+            self.attend = "Present"
+
+        else:
+            self.attend = "Absent"
+
+    def save_class(self, name):
+        with open("info.txt", "w") as fl:
+            fl.write(name)
+            self.class_name = name
+        fl.close()
+
+    def register_check(self):
+        sm = self.root
+        file_size = os.path.getsize("info.txt.txt")
+        if file_size == 0:
+            pass
+        else:
+            sm.current = "inclass"
+            self.readf()
+
+    def readf(self):
+        with open("info.txt", "r") as fl:
+            read = fl.readlines()
+            self.read = read[0]
+            self.class_name = self.read
+        fl.close()
 
     def screen_capture(self, screen):
         sm = self.root

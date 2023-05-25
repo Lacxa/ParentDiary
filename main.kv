@@ -1,40 +1,6 @@
 ScreenManager
     id:manager
     MDScreen:
-        name:"info"
-        MDBoxLayout:
-            orientation: "vertical"
-            MDTopAppBar:
-                title: "app.name"
-                specific_text_color:83 / 225, 186 / 225, 115 / 225, 1
-                md_bg_color:1, 1, 1, 1
-                pos_hint:{'center_x':.5, 'center_y':.95}
-
-            MDTabs:
-                allow_stretch:False
-                background_color:1, 1, 1, 1
-                indicator_color:36/255, 146/255, 255/255, 1
-                tab_hint_x:True
-                text_color_active:78/255, 82/255, 84/255, 1
-                text_color_normal:.5, .5, .5,
-
-                Tab:
-                    title: "Attendance"
-                    FloatLayout:
-
-
-                Tab:
-                    title:"Homework"
-                    FloatLayout:
-
-
-                Tab:
-                    title:"Results"
-                    FloatLayout:
-
-
-
-    MDScreen:
         name:"home"
         FloatLayout:
             MDLabel:
@@ -48,7 +14,7 @@ ScreenManager
                 height: self.texture_size[1]
                 width: self.texture_size[1]
             MDTextField:
-                id:cls
+                id:clas
                 mode: "rectangle"
                 fill_color: 0, 0, 0, .4
                 size_hint: .6, .1
@@ -72,5 +38,74 @@ ScreenManager
                 pos_hint:{'center_x':.5, 'center_y':.55}
                 md_bg_color: 83 / 225, 186 / 225, 115 / 225, 1
                 on_release:
-                    app.student(cls.text, idd.text)
+                    app.student(clas.text, idd.text)
+
+    MDScreen:
+        on_enter:
+            app.homework(clas.text)
+        name:"info"
+        MDBoxLayout:
+            orientation: "vertical"
+            MDTopAppBar:
+                title:app.name
+                specific_text_color:83 / 225, 186 / 225, 115 / 225, 1
+                md_bg_color:1, 1, 1, 1
+                pos_hint:{'center_x':.5, 'center_y':.95}
+
+            MDTabs:
+                allow_stretch:False
+                background_color:1, 1, 1, 1
+                indicator_color:36/255, 146/255, 255/255, 1
+                tab_hint_x:True
+                text_color_active:78/255, 82/255, 84/255, 1
+                text_color_normal:.5, .5, .5,
+
+                Tab:
+                    title: "Attendance"
+                    FloatLayout:
+
+
+                Tab:
+                    title:"Homework"
+                    FloatLayout:
+                        Work:
+
+
+                Tab:
+                    title:"Results"
+                    FloatLayout:
+
+
+
+<Work@MDBoxLayout>:
+    radius:9
+    adaptive_height:True
+    work:app.work
+    height:dp(100)
+    md_bg_color:214/255, 223/255, 232/255, 1
+    pos_hint:{"center_x":.5,"top":.99}
+    orientation:"vertical"
+    FloatLayout:
+        MDLabel:
+            id:nm
+            halign:"left"
+            text:"Today's Homework"
+            font_size:"20sp"
+            theme_text_color: "Custom"
+            text_color:26/255, 54/255, 113/255
+            pos_hint:{"center_x":.6,"center_y":.8}
+        MDLabel:
+            id:work
+            halign:"left"
+            text:root.work
+            font_size:"16sp"
+            theme_text_color: "Custom"
+            text_color:26/255, 54/255, 113/255
+            pos_hint:{"center_x":.63,"center_y":.4}
+
+
+
+
+
+
 
