@@ -4,6 +4,7 @@ from kivy import utils
 from kivy.properties import NumericProperty, StringProperty
 from kivymd.app import MDApp
 from kivy.core.window import Window
+from kivy.clock import Clock
 from kivymd.toast import toast
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.tab import MDTabsBase
@@ -32,8 +33,17 @@ class MainApp(MDApp):
     class_name = StringProperty("")
     read = StringProperty("")
 
+    student_id = StringProperty("")
+    readid = StringProperty("")
+
+    class_save = StringProperty("")
+    id_save = StringProperty("")
+
     def build(self):
         pass
+
+    def on_start(self):
+        Clock.schedule_once(lambda x: self.register_check(), .1)
 
     def student(self, clas, idd):
         if clas == "":
@@ -56,38 +66,55 @@ class MainApp(MDApp):
         else:
             self.name = data["Name"]
             self.screen_capture("info")
+            self.save_class(clas)
+            self.save_id(idd)
 
-    def homework(self, clas):
-        self.work = TR.fetch_homework(TR(), clas)
+    def homework(self):
+        self.work = TR.fetch_homework(TR(), self.class_name)
 
     def attendance(self):
-        data = TR.get_attendance(TR(), self.class_name, )
+        data = TR.get_attendance(TR(), self.class_name, self.student_id)
         if data == "present":
             self.attend = "Present"
 
-        else:
+        elif data == "absent":
             self.attend = "Absent"
 
     def save_class(self, name):
-        with open("info.txt", "w") as fl:
-            fl.write(name)
+        with open("info.txt", "a") as fl:
+            fl.write(name + '\n')
             self.class_name = name
+        fl.close()
+
+    def save_id(self, idd):
+        with open("info.txt", "a") as fl:
+            fl.write(idd)
+            self.student_id = idd
         fl.close()
 
     def register_check(self):
         sm = self.root
-        file_size = os.path.getsize("info.txt.txt")
+        file_size = os.path.getsize("info.txt")
         if file_size == 0:
             pass
         else:
-            sm.current = "inclass"
+            sm.current = "info"
             self.readf()
 
     def readf(self):
         with open("info.txt", "r") as fl:
             read = fl.readlines()
-            self.read = read[0]
+            self.read = read[0].strip()
+            self.readid = read[1].strip()
             self.class_name = self.read
+            self.student_id = self.readid
+
+            data = TR.check_student(TR(), self.class_name, self.student_id)
+            self.name = data["Name"]
+
+            self.attendance()
+            self.homework()
+
         fl.close()
 
     def screen_capture(self, screen):

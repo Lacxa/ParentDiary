@@ -41,8 +41,6 @@ ScreenManager
                     app.student(clas.text, idd.text)
 
     MDScreen:
-        on_enter:
-            app.homework(clas.text)
         name:"info"
         MDBoxLayout:
             orientation: "vertical"
@@ -63,6 +61,7 @@ ScreenManager
                 Tab:
                     title: "Attendance"
                     FloatLayout:
+                        Attend:
 
 
                 Tab:
@@ -74,6 +73,8 @@ ScreenManager
                 Tab:
                     title:"Results"
                     FloatLayout:
+
+
 
 
 
@@ -104,6 +105,31 @@ ScreenManager
             pos_hint:{"center_x":.63,"center_y":.4}
 
 
+<Attend@MDBoxLayout>:
+    radius:9
+    adaptive_height:True
+    work:app.attend
+    height:dp(100)
+    md_bg_color:214/255, 223/255, 232/255, 1
+    pos_hint:{"center_x":.5,"top":.99}
+    orientation:"vertical"
+    FloatLayout:
+        MDLabel:
+            id:nm
+            halign:"left"
+            text:"Today's Attendance"
+            font_size:"20sp"
+            theme_text_color: "Custom"
+            text_color:26/255, 54/255, 113/255
+            pos_hint:{"center_x":.6,"center_y":.8}
+        MDLabel:
+            id:attend
+            halign:"left"
+            text:root.work
+            font_size:"16sp"
+            theme_text_color: "Custom"
+            text_color:26/255, 54/255, 113/255
+            pos_hint:{"center_x":.63,"center_y":.4}
 
 
 
