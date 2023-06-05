@@ -39,6 +39,13 @@ class MainApp(MDApp):
     class_save = StringProperty("")
     id_save = StringProperty("")
 
+    #result
+    math = StringProperty("")
+    eng = StringProperty("")
+    geo = StringProperty("")
+    hist = StringProperty("")
+    science = StringProperty("")
+
     def build(self):
         pass
 
@@ -71,6 +78,16 @@ class MainApp(MDApp):
 
     def homework(self):
         self.work = TR.fetch_homework(TR(), self.class_name)
+
+    def result(self):
+        data = TR.fetch_result(TR(), self.class_name, self.student_id)
+
+        self.math = data["Math"]
+        self.eng = data["English"]
+        self.geo = data["Geography"]
+        self.hist = data["History"]
+        self.science = data["Science"]
+
 
     def attendance(self):
         data = TR.get_attendance(TR(), self.class_name, self.student_id)
@@ -114,6 +131,7 @@ class MainApp(MDApp):
 
             self.attendance()
             self.homework()
+            self.result()
 
         fl.close()
 
